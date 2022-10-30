@@ -1,5 +1,6 @@
 #loading {
     background-color: #1a1a1ab6;
+    box-shadow: #1a1a1ab6 0px 10px 30px;
     cursor: not-allowed;
     display: flex;
     justify-content: center;

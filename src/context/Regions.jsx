@@ -5,8 +5,27 @@ import { getApi } from "../helpers/getApi";
 import regionsContext from "./regionsContext";
 
 export function RegionsContextProvider({ children }) {
+  const formValueInit = {
+    nome: "",
+    email: "",
+    telefone: "",
+    cpf: "",
+    country: "",
+    city: "",
+  };
+
   const [countriesList, setCountriesList] = useState([]);
   const [citiesList, setCitiesList] = useState([]);
+  const [formValues, setFormValues] = useState(formValueInit);
+
+  useEffect(() => {
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        city: "",
+      };
+    });
+  }, [formValues.country]);
 
   useEffect(() => {
     const URL = "https://amazon-api.sellead.com/country";
@@ -24,7 +43,9 @@ export function RegionsContextProvider({ children }) {
 
   const context = {
     countriesList,
-    citiesList
+    citiesList,
+    formValues,
+    setFormValues,
   };
 
   return (

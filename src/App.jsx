@@ -1,13 +1,15 @@
-import "./App.css";
-import { useContext, useEffect, useState } from "react";
+import "./css/App.css";
+import { useContext } from "react";
 import regionsContext from "./context/regionsContext";
 import { RegionsOptions } from "./components/RegionsOptions";
 import { Loading } from "./components/Loading";
+import { validateSubmitButton } from "./helpers/validateSubmitButton";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-
-  const [formValues, setFormValues] = useState({});
-  const { countriesList, citiesList } = useContext(regionsContext);
+  const { countriesList, citiesList, formValues, setFormValues } =
+    useContext(regionsContext);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -15,6 +17,7 @@ function App() {
   };
 
   const handleSubmit = (e) => {
+    toast("Formulario enviado com sucesso!");
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
@@ -22,10 +25,8 @@ function App() {
   };
 
   return (
-    
     <div className="container">
       {(!countriesList.length || !citiesList.length) && <Loading />}
-      {/* {(true) && <Loading />} */}
       <form onSubmit={handleSubmit}>
         <label htmlFor="nome">Nome</label>
         <input
@@ -50,9 +51,9 @@ function App() {
         <label htmlFor="telefone">Telefone</label>
         <input
           id="telefone"
-          type="number"
+          type="tel"
           name="telefone"
-          placeholder="Digite seu telefone"
+          placeholder="(00) 00000-0000"
           onChange={handleInputChange}
           value={formValues.telefone || ""}
         />
@@ -66,15 +67,14 @@ function App() {
           onChange={handleInputChange}
           value={formValues.cpf || ""}
         />
-    
+
         <RegionsOptions
           labelName="country"
           title="País"
           placeholder="Selecione seu País"
           handleInputChange={handleInputChange}
           regionsList={countriesList}
-          formValues={formValues}
-         />
+        />
 
         <RegionsOptions
           labelName="city"
@@ -82,10 +82,11 @@ function App() {
           placeholder="Selecione sua Cidade"
           handleInputChange={handleInputChange}
           regionsList={citiesList}
-          formValues={formValues}
-         />
+        />
 
-        <button type="submit">Enviar Dados</button>
+        <button type="submit" disabled={validateSubmitButton(formValues)}>
+          Enviar Dados
+        </button>
       </form>
     </div>
   );
